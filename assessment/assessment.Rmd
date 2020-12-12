@@ -1,0 +1,76 @@
+---
+title: "Formative Assessments"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(parsons)
+library(tidyverse)
+tutorial_options(exercise.eval = TRUE)
+mtcars <- mtcars %>% 
+  as_tibble() %>% 
+  mutate_at(c("vs", "am", "cyl"), as.factor)
+```
+
+
+## Exercise 1
+
+Drag the statements from the top panel to the bottom panel to produce the desired plot:
+
+```{r ex1, echo=FALSE}
+question_parsons(
+  initial = c(
+      "geom_point() +",
+      "labs(title = \"A Scatterplot\") +",
+      "geom_smooth(method = \"lm\") +",
+      "mtcars %>%",
+      "facet_grid(~ vs) +",
+      "theme(legend.position = \"bottom\")",
+      "ggplot(aes(x = hp, y = mpg, color = cyl)) +"
+      ),
+  answer(
+    c(
+      "mtcars %>%",
+      "ggplot(aes(x = hp, y = mpg, color = cyl)) +",
+      "geom_point() +",
+      "geom_smooth(method = \"lm\") +",
+      "facet_grid(~ vs) +",
+      "labs(title = \"A Scatterplot\") +",
+      "theme(legend.position = \"bottom\")"
+      ),
+    correct = TRUE
+  ),
+  problem_type = "base"
+)
+```
+
+## Exercise 2
+
+Plot a Bar Plot with the number of hears in the X-axis and the size of the bars as the Horsepower and color **inside** the bars as the number of cylinders (`cyl`). Facet the plot by type of engine (`vs`). Finally, add a title with the text `"Bar Plot"`.
+
+```{r ex2, exercise=TRUE, exercise.lines = 7, exercise.eval = TRUE}
+mtcars %>%
+  ggplot(aes())
+```
+
+```{r ex2-solution}
+mtcars %>% 
+  ggplot(aes(x = gear, y = hp, fill = cyl)) +
+  geom_col() +
+  facet_wrap(~ vs) +
+  labs(title = "Bar Plot")
+```
+
+<div id="ex2-hint">
+**Hint:**
+* Start with `ggplot(aes(x = gear, y = hp, fill = cyl))`
+* then add `geom_col()`
+* followed by a `facet_wrap()`
+* finalize with a `labs(title = "Bar Plot")` 
+</div>
+
+```{r ex2-check}
+"Good job!"
+```

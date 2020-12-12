@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>ggplot2</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: left
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 30px;
+    padding: 1em 4em 1em 4em;
+}
+&lt;/style&gt;
+
+
+
+
+# `ggplot2`: How to Create Visualizations
+
+.pull-left[
+* Piping from data: `%&gt;%`
+* Mappings: `aes()`
+* Geoms: `geom_*()`
+* Labels: `labs()`
+* Facets: `facet_wrap()`
+* Theme Elements: `theme()`
+]
+
+.pull-right[
+&lt;img src="../images/ggplot2.png" width="220" /&gt;
+]
+
+---
+# Data: `mtcars`
+
+.pull-left[
+A data frame with 32 observations on 11 (numeric) variables.
+
+The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models).
+]
+
+.pull-right[
+*	`mpg` -	MPG
+*	`cyl` -	# of cylinders
+*	`disp` -	Displacement
+*	`hp` -	Gross horsepower
+*	`drat` -	Rear axle ratio
+*	`wt` -	Weight
+*	`qsec` -	1/4 mile time
+*	`vs` -	Engine
+*	`am` -	Transmission
+*	`gear` -	# forward gears
+*	`carb` -	# of carburetors
+]
+
+---
+class: center
+
+# Here's how the data look
+
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#wloeruyrjv .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#wloeruyrjv .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#wloeruyrjv .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#wloeruyrjv .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#wloeruyrjv .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wloeruyrjv .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#wloeruyrjv .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#wloeruyrjv .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#wloeruyrjv .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#wloeruyrjv .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#wloeruyrjv .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#wloeruyrjv .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#wloeruyrjv .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#wloeruyrjv .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#wloeruyrjv .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#wloeruyrjv .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#wloeruyrjv .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#wloeruyrjv .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wloeruyrjv .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#wloeruyrjv .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wloeruyrjv .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#wloeruyrjv .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#wloeruyrjv .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wloeruyrjv .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#wloeruyrjv .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#wloeruyrjv .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#wloeruyrjv .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#wloeruyrjv .gt_left {
+  text-align: left;
+}
+
+#wloeruyrjv .gt_center {
+  text-align: center;
+}
+
+#wloeruyrjv .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#wloeruyrjv .gt_font_normal {
+  font-weight: normal;
+}
+
+#wloeruyrjv .gt_font_bold {
+  font-weight: bold;
+}
+
+#wloeruyrjv .gt_font_italic {
+  font-style: italic;
+}
+
+#wloeruyrjv .gt_super {
+  font-size: 65%;
+}
+
+#wloeruyrjv .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="wloeruyrjv" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">mpg</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">cyl</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">disp</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">hp</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">drat</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">wt</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">qsec</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">vs</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">am</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">gear</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">carb</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left gt_stub">1</td>
+      <td class="gt_row gt_right">21</td>
+      <td class="gt_row gt_right">6</td>
+      <td class="gt_row gt_right">160</td>
+      <td class="gt_row gt_right">110</td>
+      <td class="gt_row gt_right">3.9</td>
+      <td class="gt_row gt_right">2.6</td>
+      <td class="gt_row gt_right">16</td>
+      <td class="gt_row gt_center">0</td>
+      <td class="gt_row gt_center">1</td>
+      <td class="gt_row gt_right">4</td>
+      <td class="gt_row gt_right">4</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">2</td>
+      <td class="gt_row gt_right">21</td>
+      <td class="gt_row gt_right">6</td>
+      <td class="gt_row gt_right">160</td>
+      <td class="gt_row gt_right">110</td>
+      <td class="gt_row gt_right">3.9</td>
+      <td class="gt_row gt_right">2.9</td>
+      <td class="gt_row gt_right">17</td>
+      <td class="gt_row gt_center">0</td>
+      <td class="gt_row gt_center">1</td>
+      <td class="gt_row gt_right">4</td>
+      <td class="gt_row gt_right">4</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">3</td>
+      <td class="gt_row gt_right">23</td>
+      <td class="gt_row gt_right">4</td>
+      <td class="gt_row gt_right">108</td>
+      <td class="gt_row gt_right">93</td>
+      <td class="gt_row gt_right">3.9</td>
+      <td class="gt_row gt_right">2.3</td>
+      <td class="gt_row gt_right">19</td>
+      <td class="gt_row gt_center">1</td>
+      <td class="gt_row gt_center">1</td>
+      <td class="gt_row gt_right">4</td>
+      <td class="gt_row gt_right">1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">4</td>
+      <td class="gt_row gt_right">21</td>
+      <td class="gt_row gt_right">6</td>
+      <td class="gt_row gt_right">258</td>
+      <td class="gt_row gt_right">110</td>
+      <td class="gt_row gt_right">3.1</td>
+      <td class="gt_row gt_right">3.2</td>
+      <td class="gt_row gt_right">19</td>
+      <td class="gt_row gt_center">1</td>
+      <td class="gt_row gt_center">0</td>
+      <td class="gt_row gt_right">3</td>
+      <td class="gt_row gt_right">1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">5</td>
+      <td class="gt_row gt_right">19</td>
+      <td class="gt_row gt_right">8</td>
+      <td class="gt_row gt_right">360</td>
+      <td class="gt_row gt_right">175</td>
+      <td class="gt_row gt_right">3.1</td>
+      <td class="gt_row gt_right">3.4</td>
+      <td class="gt_row gt_right">17</td>
+      <td class="gt_row gt_center">0</td>
+      <td class="gt_row gt_center">0</td>
+      <td class="gt_row gt_right">3</td>
+      <td class="gt_row gt_right">2</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">6</td>
+      <td class="gt_row gt_right">18</td>
+      <td class="gt_row gt_right">6</td>
+      <td class="gt_row gt_right">225</td>
+      <td class="gt_row gt_right">105</td>
+      <td class="gt_row gt_right">2.8</td>
+      <td class="gt_row gt_right">3.5</td>
+      <td class="gt_row gt_right">20</td>
+      <td class="gt_row gt_center">1</td>
+      <td class="gt_row gt_center">0</td>
+      <td class="gt_row gt_right">3</td>
+      <td class="gt_row gt_right">1</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+
+---
+class: middle
+# Pipe from data `%&gt;%`
+
+The first step is to specify a data source to create a visualization with
+
+.pull-left[
+* In `ggplot2` you can specify first the data object then pipe into `ggplot()`
+* You can use any `tibble` or `data.frame`
+]
+
+.pull-right[
+
+```r
+*mtcars %&gt;%
+  ggplot()
+```
+]
+
+---
+class: middle
+# Adding Stuff
+
+With ggplot you can add layers to you visualizations with a plus sign `+`
+
+
+```r
+mtcars %&gt;%
+  ggplot(...) +
+* layer_1 +
+* layer_2 +
+* ...
+```
+
+---
+# Mappings with `aes()`
+
+.pull-left[
+* specify mappings with `aes()`
+* You can put inside `ggplot()` this make all layers to inherit
+* You can also specify to a specific layer or override the parent mappings from `ggplot()`
+]
+
+.pull-right[
+
+```r
+mtcars %&gt;% 
+* ggplot(aes(x = mpg)) +
+  geom_histogram()
+```
+
+&lt;img src="slides_files/figure-html/mappings-1.png" width="432" /&gt;
+]
+
+---
+class: middle
+
+# Types of mappings
+
+They all must be specified inside the `aes()`:
+
+* `x` - X-axis
+* `y` - Y-axis
+* `fill` - color inside the geom
+* `label` - textual elements
+* `color` - color of the geom
+* `alpha` `\(^*\)` - transparency
+* `size` `\(^*\)` - size of geom elements
+
+\* (*if supported*)
+
+&gt; Remember you can specify *multiple* mappings
+---
+
+# `geom_histogram()`
+
+Plot Histograms with `geom_histogram()`
+
+.pull-left[
+## Mappings
+* `x`
+* `fill`
+* `alpha`
+]
+
+.pull-right[
+
+```r
+mtcars %&gt;% 
+  ggplot(aes(x = mpg, fill = vs)) +
+* geom_histogram(alpha = 0.5)
+```
+
+&lt;img src="slides_files/figure-html/geom_histogram-1.png" width="432" /&gt;
+]
+
+---
+
+# `geom_col()`
+
+Bar Plots with `geom_col()`
+
+.pull-left[
+## Mappings
+* `x`
+* `y`
+* `fill`
+* `label` - add data with a `geom_label()`
+]
+
+.pull-right[
+
+```r
+mtcars %&gt;% 
+  group_by(cyl) %&gt;% 
+  summarise_all(mean) %&gt;% 
+  ggplot(aes(x = cyl, y = mpg, label = round(mpg, 2))) +
+* geom_col() +
+* geom_label()
+```
+
+&lt;img src="slides_files/figure-html/geom_col-1.png" width="432" /&gt;
+]
+
+---
+# `geom_point()`
+
+Scatterplots with `geom_point()`
+
+.pull-left[
+## Mappings
+* `x`
+* `y`
+* `size`
+* `color`
+* Add trends with `geom_smooth()`
+]
+
+.pull-right[
+
+```r
+mtcars %&gt;% 
+  ggplot(aes(x = mpg, y = hp, color = vs)) +
+* geom_point() +
+* geom_smooth()
+```
+
+&lt;img src="slides_files/figure-html/geom_point-1.png" width="432" /&gt;
+]
+
+---
+# `geom_boxplot()`
+
+Boxplots with `geom_boxplot()` 
+
+&gt; (A statistican favorite)
+
+.pull-left[
+## Mappings
+* `x`
+* `y`
+* `fill`
+]
+
+.pull-right[
+
+```r
+mtcars %&gt;% 
+  ggplot(aes(x = mpg, y = hp, fill = vs)) +
+* geom_boxplot()
+```
+
+&lt;img src="slides_files/figure-html/geom_boxplot-1.png" width="432" /&gt;
+]
+
+---
+# Labels with `labs()`
+
+.pull-left[
+## Labels
+* `x`
+* `y`
+* `title`
+* `subtitle`
+* `caption`
+]
+
+.pull-right[
+
+```r
+mtcars %&gt;% 
+  ggplot(aes(x = mpg, y = hp)) +
+  geom_point() +
+* labs(
+*   title = "A Scatterplot",
+*   subtitle = "Useful for seeing trends",
+*   x = "Miles Per Gallon",
+*   y = "Horsepower",
+*   caption = "A"
+  )
+```
+
+&lt;img src="slides_files/figure-html/labs-1.png" width="432" /&gt;
+]
+
+---
+# Labels with `labs()`
+
+You can divide your graph into facets
+
+.pull-left[
+## Arguments
+* `formula` - `~ var`
+* `scales`
+  * `free`
+  * `free_x`
+  * `free_y`
+* `labeller`
+  * `label_value`
+  * `label_both`
+]
+
+.pull-right[
+
+```r
+mtcars %&gt;% 
+  ggplot(aes(x = mpg, y = hp)) +
+  geom_point() +
+* facet_wrap(~ cyl,
+*            scales = "free_y")
+```
+
+&lt;img src="slides_files/figure-html/facets-1.png" width="432" /&gt;
+]
+
+---
+# Controlling Elements
+
+You can control your graph with `theme()`
+
+.pull-left[
+
+```r
+mtcars %&gt;% 
+  ggplot(aes(x = mpg, y = hp, color = vs)) +
+  geom_point() +
+  geom_smooth() +
+* theme(
+*   legend.position = "bottom",
+*   # ... a lot of more stuff
+  )
+```
+]
+
+.pull-right[
+&lt;img src="slides_files/figure-html/unnamed-chunk-1-1.png" width="432" /&gt;
+]
+
+Check the documentation `?theme`, also for APA theme check `jtools::theme_apa()`
+
+---
+class: middle
+
+# Common Mistakes
+
+* Confusion between mappings `fill` vs `color`
+* Calling wrong data source as `data`
+  * `object of type 'closure' is not subsettable`
+* `color` mapping outside `aes()`
+
+---
+class: center, middle, inverse
+
+# Thanks!
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+.right[
+[<i class="fab  fa-linkedin "></i> @storopoli](https://www.linkedin.com/in/storopoli/)  
+
+[<i class="fab  fa-github "></i> @storopoli](http://github.com/storopoli)  
+
+[<i class="fas  fa-paper-plane "></i> thestoropoli@gmail.com](mailto:thestoropoli@gmail.com)
+
+]
+
+---
+
+# Session Information
+
+
+```r
+sessionInfo()
+## R version 4.0.3 (2020-10-10)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Big Sur 10.16
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] gt_0.2.2        forcats_0.5.0   stringr_1.4.0   dplyr_1.0.2    
+##  [5] purrr_0.3.4     readr_1.4.0     tidyr_1.1.2     tibble_3.0.4   
+##  [9] ggplot2_3.3.2   tidyverse_1.3.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_1.0.5        lubridate_1.7.9.2 lattice_0.20-41   png_0.1-7        
+##  [5] assertthat_0.2.1  digest_0.6.27     R6_2.5.0          cellranger_1.1.0 
+##  [9] backports_1.2.1   reprex_0.3.0      evaluate_0.14     icon_0.1.0       
+## [13] httr_1.4.2        xaringan_0.18     pillar_1.4.7      rlang_0.4.9      
+## [17] readxl_1.3.1      rstudioapi_0.13   Matrix_1.2-18     checkmate_2.0.0  
+## [21] rmarkdown_2.5     labeling_0.4.2    splines_4.0.3     munsell_0.5.0    
+## [25] broom_0.7.2       compiler_4.0.3    modelr_0.1.8      xfun_0.19        
+## [29] pkgconfig_2.0.3   mgcv_1.8-33       htmltools_0.5.0   tidyselect_1.1.0 
+## [33] fansi_0.4.1       crayon_1.3.4      dbplyr_2.0.0      withr_2.3.0      
+## [37] grid_4.0.3        nlme_3.1-151      jsonlite_1.7.2    gtable_0.3.0     
+## [41] lifecycle_0.2.0   DBI_1.1.0         magrittr_2.0.1    scales_1.1.1     
+## [45] cli_2.2.0         stringi_1.5.3     farver_2.0.3      fs_1.5.0         
+## [49] xml2_1.3.2        ellipsis_0.3.1    generics_0.1.0    vctrs_0.3.5      
+## [53] tools_4.0.3       glue_1.4.2        hms_0.5.3         parallel_4.0.3   
+## [57] yaml_2.2.1        colorspace_2.0-0  rvest_0.3.6       knitr_1.30       
+## [61] haven_2.3.1       sass_0.2.0
+```
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
