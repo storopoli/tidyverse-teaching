@@ -48,7 +48,7 @@ question_parsons(
 
 ## Exercise 2
 
-Plot a Bar Plot with the number of hears in the X-axis and the size of the bars as the Horsepower and color **inside** the bars as the number of cylinders (`cyl`). Facet the plot by type of engine (`vs`). Finally, add a title with the text `"Bar Plot"`.
+Plot a Bar Plot with the number of gears in the X-axis and the height of the bars as the Horsepower and color **inside** the bars as the number of cylinders (`cyl`). Facet the plot by type of engine (`vs`). Finally, add a title with the text `"Bar Plot"`.
 
 ```{r ex2, exercise=TRUE, exercise.lines = 7, exercise.eval = TRUE}
 mtcars %>%
@@ -65,10 +65,12 @@ mtcars %>%
 
 <div id="ex2-hint">
 **Hint:**
+
 * Start with `ggplot(aes(x = gear, y = hp, fill = cyl))`
 * then add `geom_col()`
 * followed by a `facet_wrap()`
-* finalize with a `labs(title = "Bar Plot")` 
+* finalize with a `labs(title = "Bar Plot")`
+
 </div>
 
 ```{r ex2-check}
