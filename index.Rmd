@@ -60,10 +60,10 @@ knitr::include_graphics("images/conceptmap.png")
 </div>
 
 
-## [**Formative Assessment**](https://storopoli.shinyapps.io/assessment_example/)
+## [**Formative Assessment**](https://storopoli.shinyapps.io/assessment-example/)
 
 <div class="resp-container">
-<iframe class="testiframe" src="https://storopoli.shinyapps.io/assessment_example/">
+<iframe class="testiframe" src="https://storopoli.shinyapps.io/assessment-example/">
   Please use a browser that supports iframe embedding. If you are seeing this message Google "browser iframe embedding not rendering".
 </iframe>
 </div>
